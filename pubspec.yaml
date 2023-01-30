@@ -1,0 +1,21 @@
+name: fe2ee
+description: Flutter End to End Encryption pair with NodeJs version.
+version: 1.0.0
+homepage:
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  crypton: ^2.1.0
+  encrypt: ^5.0.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  
+flutter:
