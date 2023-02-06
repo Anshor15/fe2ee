@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:crypton/crypton.dart';
 import 'package:encrypt/encrypt.dart' as enc;
@@ -36,8 +35,7 @@ class FE2EE {
 
   /// Decrypt encrypted data
   String decrypt(String encrypted) {
-    RSAPrivateKey rsaPrivateKey =
-        RSAPrivateKey.fromPEM(utf8.decode(base64Decode(selfPrivateKey)));
+    RSAPrivateKey rsaPrivateKey = RSAPrivateKey.fromPEM(selfPrivateKey);
     enc.Key key = aesKey;
 
     Uint8List encryptedBuffer = base64Decode(encrypted);
@@ -52,7 +50,8 @@ class FE2EE {
         )
         .toList();
     var decryptedIv = rsaPrivateKey.decrypt(utf8.decode(ivBuffer));
-    var iv = enc.IV.fromBase64(decryptedIv);
+
+    var iv = enc.IV.fromBase16(decryptedIv);
     enc.Encrypted encryptedData =
         enc.Encrypted.fromBase64(base64Encode(encryptedDataBuffer));
 
