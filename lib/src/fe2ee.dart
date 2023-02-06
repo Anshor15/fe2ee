@@ -9,7 +9,7 @@ import 'package:encrypt/encrypt.dart' as enc;
 class FE2EE {
   String selfPrivateKey;
   String publicKey;
-  String aesKey;
+  enc.Key aesKey;
 
   FE2EE(
       {required this.selfPrivateKey,
@@ -18,8 +18,8 @@ class FE2EE {
 
   /// Encrypt data
   String encrypt(String data) {
-    var rsaPublicKey = utf8.decode(base64Decode(publicKey));
-    var key = enc.Key.fromBase64(aesKey);
+    var rsaPublicKey = publicKey;
+    enc.Key key = aesKey;
     var iv = enc.IV.fromSecureRandom(16);
 
     var encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
@@ -38,7 +38,7 @@ class FE2EE {
   String decrypt(String encrypted) {
     RSAPrivateKey rsaPrivateKey =
         RSAPrivateKey.fromPEM(utf8.decode(base64Decode(selfPrivateKey)));
-    enc.Key key = enc.Key.fromBase64(aesKey);
+    enc.Key key = aesKey;
 
     Uint8List encryptedBuffer = base64Decode(encrypted);
     List<int> ivBuffer;
