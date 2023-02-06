@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:crypton/crypton.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 
+/// Flutter End to End Encryption
 class FE2EE {
   String selfPrivateKey;
   String publicKey;
@@ -14,6 +16,7 @@ class FE2EE {
       required this.publicKey,
       required this.aesKey});
 
+  /// Encrypt data
   String encrypt(String data) {
     var rsaPublicKey = utf8.decode(base64Decode(publicKey));
     var key = enc.Key.fromBase64(aesKey);
@@ -31,6 +34,7 @@ class FE2EE {
     return encryptedData;
   }
 
+  /// Decrypt encrypted data
   String decrypt(String encrypted) {
     RSAPrivateKey rsaPrivateKey =
         RSAPrivateKey.fromPEM(utf8.decode(base64Decode(selfPrivateKey)));
@@ -57,4 +61,21 @@ class FE2EE {
 
     return finalDecrypted;
   }
+}
+
+/// Generate random AES and RSA key
+class GenerateKey {
+  EKeyPair get({aesKeySize = 16, rsaKeyLength = 2048}) {
+    var aesKey = enc.Key.fromSecureRandom(aesKeySize);
+    RSAKeypair keypair = RSAKeypair.fromRandom(keySize: rsaKeyLength);
+
+    return EKeyPair(aesKey: aesKey, rsaKeypair: keypair);
+  }
+}
+
+class EKeyPair {
+  final enc.Key aesKey;
+  final RSAKeypair rsaKeypair;
+
+  const EKeyPair({required this.aesKey, required this.rsaKeypair});
 }
